@@ -14,7 +14,14 @@ const registerUser = async (req, res) => {
         message: "User Already exists with the same email! Please try again",
       });
 
-    const hashPassword = await bcrypt.hash(password, 12);
+    const { userName, email, password } = req.body;
+
+    if (!userName || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       userName,
       email,
