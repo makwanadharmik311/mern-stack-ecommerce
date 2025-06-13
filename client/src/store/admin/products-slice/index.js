@@ -1,64 +1,76 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Use environment variable for API base URL
+const API_URL = import.meta.env.VITE_API_URL;
+
 const initialState = {
   isLoading: false,
   productList: [],
+  error: null, // to store error messages if any
 };
 
 export const addNewProduct = createAsyncThunk(
-  "/products/addnewproduct",
-  async (formData) => {
-    const result = await axios.post(
-      "http://localhost:5000/api/admin/products/add",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return result?.data;
+  "adminProducts/addNewProduct",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const result = await axios.post(
+        `${API_URL}/api/admin/products/add`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return result?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to add product");
+    }
   }
 );
 
 export const fetchAllProducts = createAsyncThunk(
-  "/products/fetchAllProducts",
-  async () => {
-    const result = await axios.get(
-      "http://localhost:5000/api/admin/products/get"
-    );
-
-    return result?.data;
+  "adminProducts/fetchAllProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const result = await axios.get(`${API_URL}/api/admin/products/get`);
+      return result?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch products");
+    }
   }
 );
 
 export const editProduct = createAsyncThunk(
-  "/products/editProduct",
-  async ({ id, formData }) => {
-    const result = await axios.put(
-      `http://localhost:5000/api/admin/products/edit/${id}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return result?.data;
+  "adminProducts/editProduct",
+  async ({ id, formData }, { rejectWithValue }) => {
+    try {
+      const result = await axios.put(
+        `${API_URL}/api/admin/products/edit/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return result?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to edit product");
+    }
   }
 );
 
 export const deleteProduct = createAsyncThunk(
-  "/products/deleteProduct",
-  async (id) => {
-    const result = await axios.delete(
-      `http://localhost:5000/api/admin/products/delete/${id}`
-    );
-
-    return result?.data;
+  "adminProducts/deleteProduct",
+  async (id, { rejectWithValue }) => {
+    try {
+      const result = await axios.delete(`${API_URL}/api/admin/products/delete/${id}`);
+      return result?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to delete product");
+    }
   }
 );
 
@@ -68,8 +80,10 @@ const AdminProductsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch All Products
       .addCase(fetchAllProducts.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchAllProducts.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -78,7 +92,10 @@ const AdminProductsSlice = createSlice({
       .addCase(fetchAllProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
+        state.error = action.payload;
       });
+
+    // You can also handle the other thunks (add, edit, delete) if needed similarly
   },
 });
 
