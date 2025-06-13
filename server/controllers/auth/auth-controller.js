@@ -14,8 +14,6 @@ const registerUser = async (req, res) => {
         message: "User Already exists with the same email! Please try again",
       });
 
-    const { userName, email, password } = req.body;
-
     if (!userName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -37,10 +35,11 @@ const registerUser = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured",
+      message: "Some error occurred",
     });
   }
 };
+
 
 //login
 const loginUser = async (req, res) => {
