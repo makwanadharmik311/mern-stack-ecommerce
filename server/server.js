@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-app.use(cors());
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const adminOrderRouter = require("./routes/admin/order-routes");
@@ -25,6 +24,7 @@ mongoose
   .catch((error) => console.log(error));
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.use(
