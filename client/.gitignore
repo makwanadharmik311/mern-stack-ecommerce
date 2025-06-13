@@ -7,21 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency folders
 node_modules
-dist
+
+# Build output folders
+/server/dist    # Ignore server build
+!client/dist    # Allow client dist for deployment
 dist-ssr
 *.local
 
-/build
-
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Build folders
+!/client/build  # Allow client build (for CRA if ever used)
