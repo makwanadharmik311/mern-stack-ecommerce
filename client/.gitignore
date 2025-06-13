@@ -9,7 +9,12 @@ lerna-debug.log*
 
 # Dependency folders
 node_modules
+
+# Only ignore main .env, NOT .env.production or .env.development
 .env
+!.env.production
+!.env.development
+
 # Build output folders
 /server/dist    # Ignore server build
 !client/dist    # Allow client dist for deployment

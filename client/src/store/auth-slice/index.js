@@ -13,7 +13,7 @@ export const registerUser = createAsyncThunk(
   "/auth/registerUser",
   async (formData) => {
     const response = await axios.post(
-      `https://internship-2-t4jw.onrender.com/api/auth/register`,
+      `${API_URL}/api/auth/register`,
       formData,
       { withCredentials: true }
     );
@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk(
   "/auth/loginUser",
   async (formData) => {
     const response = await axios.post(
-      `https://internship-2-t4jw.onrender.com/api/auth/login`,
+      `${API_URL}/api/auth/login`,
       formData,
       { withCredentials: true }
     );
